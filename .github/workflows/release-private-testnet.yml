@@ -6,6 +6,8 @@ name: self-hosted testnet
 # - https://github.com/<org>/<repo>/settings/actions/runners/new?arch=x64&os=linux
 #
 
+# temp: ssh -o StrictHostKeychecking=no root@5.161.240.108
+
 on:
   push:
     tags:
