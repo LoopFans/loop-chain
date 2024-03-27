@@ -3,7 +3,7 @@ project_name: loopchain
 release:
   github:
     owner: LoopFans
-    name: loopchain
+    name: loop-chain
   name_template: '{{.Tag}}'
 
 # Only uncomment os, arch, and targets if you are NOT using cosmwasm / wasm-light-client.
