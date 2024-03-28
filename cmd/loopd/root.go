@@ -2,6 +2,7 @@ package main
 
 import (
 	"os"
+	"time"
 
 	dbm "github.com/cosmos/cosmos-db"
 	"github.com/spf13/cobra"
@@ -102,8 +103,11 @@ func NewRootCmd() *cobra.Command {
 				return err
 			}
 
+			// 2 seconds + 1 second tendermint = 3 second blocks
+			timeoutCommit := 2 * time.Second
+
 			customAppTemplate, customAppConfig := initAppConfig()
-			customCMTConfig := initCometBFTConfig()
+			customCMTConfig := initCometBFTConfig(timeoutCommit)
 
 			return server.InterceptConfigsPreRunHandler(cmd, customAppTemplate, customAppConfig, customCMTConfig)
 		},
