@@ -1,7 +1,7 @@
 {
   "app_name": "loopd",
   "app_version": "",
-  "genesis_time": "2024-03-27T03:36:19.705242777Z",
+  "genesis_time": "2024-04-01T19:50:56.819843056Z",
   "chain_id": "loop-1",
   "initial_height": 1,
   "app_hash": null,
@@ -18,7 +18,22 @@
         "sig_verify_cost_ed25519": "590",
         "sig_verify_cost_secp256k1": "1000"
       },
-      "accounts": []
+      "accounts": [
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t",
+          "pub_key": null,
+          "account_number": "0",
+          "sequence": "0"
+        },
+        {
+          "@type": "/cosmos.auth.v1beta1.BaseAccount",
+          "address": "loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q",
+          "pub_key": null,
+          "account_number": "1",
+          "sequence": "0"
+        }
+      ]
     },
     "authz": {
       "authorization": []
@@ -28,27 +43,53 @@
         "send_enabled": [],
         "default_send_enabled": true
       },
-      "balances": [],
-      "supply": [],
+      "balances": [
+        {
+          "address": "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t",
+          "coins": [
+            {
+              "denom": "token",
+              "amount": "5000000000000"
+            }
+          ]
+        },
+        {
+          "address": "loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q",
+          "coins": [
+            {
+              "denom": "token",
+              "amount": "5000000000000"
+            }
+          ]
+        }
+      ],
+      "supply": [
+        {
+          "denom": "token",
+          "amount": "10000000000000"
+        }
+      ],
       "denom_metadata": [
         {
-          "base": "poastake",
+          "description": "Denom metadata for POA Power (poastake)",
           "denom_units": [
             {
-              "aliases": [],
               "denom": "poastake",
-              "exponent": 0
+              "exponent": 0,
+              "aliases": []
             },
             {
-              "aliases": [],
               "denom": "POA",
-              "exponent": 6
+              "exponent": 6,
+              "aliases": []
             }
           ],
-          "description": "Denom metadata for POA Power (poastake)",
+          "base": "poastake",
           "display": "POA",
           "name": "POA",
-          "symbol": "POA"
+          "symbol": "POA",
+          "uri": "",
+          "uri_hash": ""
         }
       ],
       "send_enabled": []
@@ -246,7 +287,8 @@
     "poa": {
       "params": {
         "admins": [
-          "loop10d07y265gmmuvt4z0w9aw880jnsr700j4m0ya0"
+          "loop10d07y265gmmuvt4z0w9aw880jnsr700j4m0ya0",
+          "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t"
         ],
         "allow_validator_self_exit": true
       }
@@ -300,10 +342,13 @@
     "wasm": {
       "params": {
         "code_upload_access": {
-          "permission": "Everybody",
-          "addresses": []
+          "permission": "AnyOfAddresses",
+          "addresses": [
+            "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t",
+            "loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q"
+          ]
         },
-        "instantiate_default_permission": "Everybody"
+        "instantiate_default_permission": "AnyOfAddresses"
       },
       "codes": [],
       "contracts": [],

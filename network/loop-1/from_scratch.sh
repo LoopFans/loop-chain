@@ -1,4 +1,7 @@
 # Takes a default genesis and creates a new modified genesis file.
+#
+# sh network/loop-1/from_scratch.sh
+#
 
 CHAIN_ID=loop-1
 
@@ -8,7 +11,7 @@ export HOME_DIR=$(eval echo "${HOME_DIR:-"~/.loopchain"}")
 
 rm -rf $HOME_DIR && echo "Removed $HOME_DIR"
 
-loopd init moniker --chain-id=$CHAIN_ID --default-denom=poastake
+loopd init moniker --chain-id=$CHAIN_ID --default-denom=poastake --home $HOME_DIR
 
 update_genesis () {
     cat $HOME_DIR/config/genesis.json | jq "$1" > $HOME_DIR/config/tmp_genesis.json && mv $HOME_DIR/config/tmp_genesis.json $HOME_DIR/config/genesis.json
@@ -72,17 +75,18 @@ update_genesis '.app_state["staking"]["params"]["bond_denom"]="poastake"'
 update_genesis '.app_state["tokenfactory"]["params"]["denom_creation_fee"]=[]'
 update_genesis '.app_state["tokenfactory"]["params"]["denom_creation_gas_consume"]="250000"'
 
-# TODO: wasm params (code_upload_access, addresses, instantiate_default_permission)
+update_genesis '.app_state["wasm"]["params"]["code_upload_access"]["permission"]="AnyOfAddresses"'
+update_genesis '.app_state["wasm"]["params"]["instantiate_default_permission"]="AnyOfAddresses"'
+update_genesis '.app_state["wasm"]["params"]["code_upload_access"]["addresses"]=["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t","loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q"]'
 
 
-# TODO: Loop accounts, the multisig
-# gov, ...
-update_genesis '.app_state["poa"]["params"]["admins"]=["loop10d07y265gmmuvt4z0w9aw880jnsr700j4m0ya0"]'
+# gov, addrFromTom
+update_genesis '.app_state["poa"]["params"]["admins"]=["loop10d07y265gmmuvt4z0w9aw880jnsr700j4m0ya0", "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t"]'
 
 # TODO:
 # add genesis accounts
-# loopd genesis add-genesis-account loop1validator 1000000poastake,10000000token --append # validator accounts each get 1 token. handled in the gentx script below.
-loopd genesis add-genesis-account loop1multisig 5000000000000token --append # multisig
+loopd genesis add-genesis-account loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t 5000000000000token --append # tom / authority
+loopd genesis add-genesis-account loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q 5000000000000token --append # shared cosmwasm addr
 
 # TODO: not tested yet
 # iterate through the gentx directory, print the files
