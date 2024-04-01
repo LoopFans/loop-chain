@@ -28,6 +28,8 @@ func (s *AnteTestSuite) SetupTest() {
 }
 
 func TestAnteTestSuite(t *testing.T) {
+	app.SetConfigBech32()
+
 	suite.Run(t, new(AnteTestSuite))
 }
 

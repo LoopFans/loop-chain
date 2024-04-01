@@ -20,6 +20,9 @@ import (
 func TestAppExport(t *testing.T) {
 	db := dbm.NewMemDB()
 	logger := log.NewTestLogger(t)
+
+	SetConfigBech32()
+
 	gapp := NewChainAppWithCustomOptions(t, false, SetupOptions{
 		Logger:  logger.With("instance", "first"),
 		DB:      db,

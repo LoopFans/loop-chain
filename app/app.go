@@ -174,14 +174,6 @@ func GetPoAAdmin() string {
 	return "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t"
 }
 
-func init() {
-	sdkConfig := sdk.GetConfig()
-	sdkConfig.SetBech32PrefixForAccount(Bech32PrefixAccAddr, Bech32PrefixAccPub)
-	sdkConfig.SetBech32PrefixForValidator(Bech32PrefixValAddr, Bech32PrefixValPub)
-	sdkConfig.SetBech32PrefixForConsensusNode(Bech32PrefixConsAddr, Bech32PrefixConsPub)
-	sdkConfig.Seal()
-}
-
 const appName = "loopchain"
 
 var (
@@ -1371,4 +1363,13 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(packetforwardtypes.ModuleName).WithKeyTable(packetforwardtypes.ParamKeyTable())
 
 	return paramsKeeper
+}
+
+// SetConfigBech32 sets the global bech32 config for unit testing.
+func SetConfigBech32() {
+	sdkConfig := sdk.GetConfig()
+	sdkConfig.SetBech32PrefixForAccount(Bech32PrefixAccAddr, Bech32PrefixAccPub)
+	sdkConfig.SetBech32PrefixForValidator(Bech32PrefixValAddr, Bech32PrefixValPub)
+	sdkConfig.SetBech32PrefixForConsensusNode(Bech32PrefixConsAddr, Bech32PrefixConsPub)
+	sdkConfig.Seal()
 }
