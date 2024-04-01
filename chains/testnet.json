@@ -55,6 +55,26 @@
                     {
                         "key": "app_state.gov.params.min_deposit.0.amount",
                         "value": "1"
+                    },
+                    {
+                        "key": "app_state.wasm.params.code_upload_access.permission",
+                        "value": "AnyOfAddresses"
+                    },
+                    {
+                        "key": "app_state.wasm.params.instantiate_default_permission",
+                        "value": "AnyOfAddresses"
+                    },
+                    {
+                        "key": "app_state.wasm.params.instantiate_default_permission",
+                        "value": "AnyOfAddresses"
+                    },
+                    {
+                        "key": "app_state.wasm.params.code_upload_access.addresses",
+                        "value": ["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t","loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q"]
+                    },
+                    {
+                        "key": "app_state.poa.params.admins",
+                        "value": ["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t"]
                     }
                 ],
                 "accounts": [
@@ -69,6 +89,16 @@
                         "address": "loop1efd63aw40lxf3n4mhf7dzhjkr453axur4pahwk",
                         "amount": "10000000000token",
                         "mnemonic": "wealth flavor believe regret funny network recall kiss grape useless pepper cram hint member few certain unveil rather brick bargain curious require crowd raise"
+                    },
+                    {
+                        "name": "authority",
+                        "address": "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t",
+                        "amount": "10000000000token"
+                    },
+                    {
+                        "name": "contractpermission",
+                        "address": "loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q",
+                        "amount": "10000000000token"
                     }
                 ],
                 "startup_commands": []
