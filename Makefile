@@ -16,6 +16,15 @@ export GO111MODULE = on
 
 # process build tags
 
+# don't override user values
+ifeq (,$(VERSION))
+  VERSION := $(shell git describe --tags --always)
+  # if VERSION is empty, then populate it with branch's name and raw commit hash
+  ifeq (,$(VERSION))
+    VERSION := $(BRANCH)-$(COMMIT)
+  endif
+endif
+
 build_tags = netgo
 ifeq ($(LEDGER_ENABLED),true)
   ifeq ($(OS),Windows_NT)
@@ -57,6 +66,7 @@ ldflags = -X github.com/cosmos/cosmos-sdk/version.Name=loopchain \
 		  -X github.com/cosmos/cosmos-sdk/version.AppName=loopd \
 		  -X github.com/cosmos/cosmos-sdk/version.Version=$(VERSION) \
 		  -X github.com/cosmos/cosmos-sdk/version.Commit=$(COMMIT) \
+		  -X github.com/github.com/LoopFans/loop-chain/app.Bech32Prefix=loop \
 		  -X "github.com/cosmos/cosmos-sdk/version.BuildTags=$(build_tags_comma_sep)"
 
 ifeq ($(WITH_CLEVELDB),yes)
