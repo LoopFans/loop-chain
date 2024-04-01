@@ -11,7 +11,7 @@ export HOME_DIR=$(eval echo "${HOME_DIR:-"~/.loopchain"}")
 
 rm -rf $HOME_DIR && echo "Removed $HOME_DIR"
 
-loopd init moniker --chain-id=$CHAIN_ID --default-denom=poastake --home $HOME_DIR
+loopd init moniker --chain-id=$CHAIN_ID --default-denom=upoa --home $HOME_DIR
 
 update_genesis () {
     cat $HOME_DIR/config/genesis.json | jq "$1" > $HOME_DIR/config/tmp_genesis.json && mv $HOME_DIR/config/tmp_genesis.json $HOME_DIR/config/genesis.json
@@ -25,11 +25,11 @@ update_genesis '.app_state["auth"]["params"]["max_memo_characters"]="512"'
 
 update_genesis '.app_state["bank"]["denom_metadata"]=[
         {
-            "base": "poastake",
+            "base": "upoa",
             "denom_units": [
             {
                 "aliases": [],
-                "denom": "poastake",
+                "denom": "upoa",
                 "exponent": 0
             },
             {
@@ -38,7 +38,7 @@ update_genesis '.app_state["bank"]["denom_metadata"]=[
                 "exponent": 6
             }
             ],
-            "description": "Denom metadata for POA Power (poastake)",
+            "description": "Denom metadata for POA Power (upoa)",
             "display": "POA",
             "name": "POA",
             "symbol": "POA"
@@ -70,7 +70,7 @@ update_genesis '.app_state["slashing"]["params"]["downtime_jail_duration"]="60s"
 update_genesis '.app_state["slashing"]["params"]["slash_fraction_double_sign"]="1.000000000000000000"'
 update_genesis '.app_state["slashing"]["params"]["slash_fraction_downtime"]="0.000000000000000000"'
 
-update_genesis '.app_state["staking"]["params"]["bond_denom"]="poastake"'
+update_genesis '.app_state["staking"]["params"]["bond_denom"]="upoa"'
 
 update_genesis '.app_state["tokenfactory"]["params"]["denom_creation_fee"]=[]'
 update_genesis '.app_state["tokenfactory"]["params"]["denom_creation_gas_consume"]="250000"'
@@ -93,9 +93,9 @@ loopd genesis add-genesis-account loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q 50
 # https://github.com/strangelove-ventures/bech32cli
 for filename in gentx/*.json; do
     addr=`cat $filename | jq -r .body.messages[0].validator_address | xargs -I {} bech32 transform {} loop`
-    raw_coin=`cat $filename | jq -r .body.messages[0].value` # { "denom": "poastake", "amount": "1000000" }
-    coin=$(echo $raw_coin | jq -r '.amount + .denom') # make coin = 1000000poastake
-    loopd genesis add-genesis-account $addr $coin,10000000token --append # also gives 10 TOKENS
+    raw_coin=`cat $filename | jq -r .body.messages[0].value` # { "denom": "upoa", "amount": "1000000" }
+    coin=$(echo $raw_coin | jq -r '.amount + .denom') # make coin = 1000000upoa
+    loopd genesis add-genesis-account $addr $coin,10000000token --append # also gives 10 TOKENS (not sure if this is desired)
 done
 loopd genesis collect-gentxs --gentx-dir network/loop-1/gentx --home $HOME/.loopchain
 

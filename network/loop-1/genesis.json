@@ -1,7 +1,7 @@
 {
   "app_name": "loopd",
   "app_version": "",
-  "genesis_time": "2024-04-01T19:50:56.819843056Z",
+  "genesis_time": "2024-04-01T19:54:01.09857653Z",
   "chain_id": "loop-1",
   "initial_height": 1,
   "app_hash": null,
@@ -71,10 +71,10 @@
       ],
       "denom_metadata": [
         {
-          "description": "Denom metadata for POA Power (poastake)",
+          "description": "Denom metadata for POA Power (upoa)",
           "denom_units": [
             {
-              "denom": "poastake",
+              "denom": "upoa",
               "exponent": 0,
               "aliases": []
             },
@@ -84,7 +84,7 @@
               "aliases": []
             }
           ],
-          "base": "poastake",
+          "base": "upoa",
           "display": "POA",
           "name": "POA",
           "symbol": "POA",
@@ -310,7 +310,7 @@
         "max_validators": 100,
         "max_entries": 7,
         "historical_entries": 10000,
-        "bond_denom": "poastake",
+        "bond_denom": "upoa",
         "min_commission_rate": "0.000000000000000000"
       },
       "last_total_power": "0",
