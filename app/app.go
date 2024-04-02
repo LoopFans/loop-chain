@@ -606,6 +606,16 @@ func NewChainApp(
 		GetPoAAdmin(),
 	)
 
+	// Initialize the poa Keeper and and AppModule
+	app.POAKeeper = poakeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(keys[poa.StoreKey]),
+		app.StakingKeeper,
+		app.SlashingKeeper,
+		app.BankKeeper,
+		logger,
+	)
+
 	// Create the tokenfactory keeper
 	app.TokenFactoryKeeper = tokenfactorykeeper.NewKeeper(
 		appCodec,
@@ -617,22 +627,12 @@ func NewChainApp(
 			tokenfactorytypes.EnableBurnFrom,
 			tokenfactorytypes.EnableForceTransfer,
 			tokenfactorytypes.EnableSetMetadata,
-			// tokenfactorytypes.EnableSudoMint,
+			tokenfactorytypes.EnableSudoMint,
 		},
-		tokenfactorykeeper.DefaultIsSudoAdminFunc,
+		app.POAKeeper.IsAdmin,
 		GetPoAAdmin(),
 	)
 	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(app.BankKeeper, &app.TokenFactoryKeeper)...)
-
-	// Initialize the poa Keeper and and AppModule
-	app.POAKeeper = poakeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[poa.StoreKey]),
-		app.StakingKeeper,
-		app.SlashingKeeper,
-		app.BankKeeper,
-		logger,
-	)
 
 	// IBC Fee Module keeper
 	app.IBCFeeKeeper = ibcfeekeeper.NewKeeper(
