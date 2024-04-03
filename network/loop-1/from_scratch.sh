@@ -88,16 +88,17 @@ update_genesis '.app_state["poa"]["params"]["admins"]=["loop10d07y265gmmuvt4z0w9
 loopd genesis add-genesis-account loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t 5000000000000token --append # tom / authority
 loopd genesis add-genesis-account loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q 5000000000000token --append # shared cosmwasm addr
 
-# TODO: not tested yet
 # iterate through the gentx directory, print the files
 # https://github.com/strangelove-ventures/bech32cli
-for filename in gentx/*.json; do
+for filename in network/loop-1/gentx/*.json; do
+    echo "Processing $filename"
     addr=`cat $filename | jq -r .body.messages[0].validator_address | xargs -I {} bech32 transform {} loop`
     raw_coin=`cat $filename | jq -r .body.messages[0].value` # { "denom": "upoa", "amount": "1000000" }
     coin=$(echo $raw_coin | jq -r '.amount + .denom') # make coin = 1000000upoa
-    loopd genesis add-genesis-account $addr $coin,10000000token --append # also gives 10 TOKENS (not sure if this is desired)
+    loopd genesis add-genesis-account $addr $coin --append
 done
 loopd genesis collect-gentxs --gentx-dir network/loop-1/gentx --home $HOME/.loopchain
 
-
 cp ~/.loopchain/config/genesis.json ./network/$CHAIN_ID/genesis.json
+
+loopd genesis validate
