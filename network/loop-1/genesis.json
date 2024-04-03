@@ -1,7 +1,7 @@
 {
   "app_name": "loopd",
-  "app_version": "",
-  "genesis_time": "2024-04-01T19:54:01.09857653Z",
+  "app_version": "1.0.0",
+  "genesis_time": "2024-04-03T22:37:28.566741353Z",
   "chain_id": "loop-1",
   "initial_height": 1,
   "app_hash": null,
@@ -106,7 +106,7 @@
     "crisis": {
       "constant_fee": {
         "denom": "token",
-        "amount": "10000000"
+        "amount": "1000000000"
       }
     },
     "distribution": {
@@ -161,7 +161,7 @@
         "min_deposit": [
           {
             "denom": "token",
-            "amount": "1000000"
+            "amount": "100000000"
           }
         ],
         "max_deposit_period": "259200s",
@@ -177,7 +177,7 @@
         "expedited_min_deposit": [
           {
             "denom": "token",
-            "amount": "1000000"
+            "amount": "1000000000"
           }
         ],
         "burn_vote_quorum": false,
@@ -295,8 +295,8 @@
     },
     "slashing": {
       "params": {
-        "signed_blocks_window": "10000",
-        "min_signed_per_window": "0.050000000000000000",
+        "signed_blocks_window": "30000",
+        "min_signed_per_window": "0.010000000000000000",
         "downtime_jail_duration": "60s",
         "slash_fraction_double_sign": "1.000000000000000000",
         "slash_fraction_downtime": "0.000000000000000000"
