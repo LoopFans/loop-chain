@@ -164,6 +164,16 @@ import (
 	packetforwardtypes "github.com/cosmos/ibc-apps/middleware/packet-forward-middleware/v8/packetforward/types"
 )
 
+func GetPoAAdmin() string {
+	// used only in e2e testing with interchaintest or testnets
+	if address := os.Getenv("POA_ADMIN_ADDRESS"); address != "" {
+		return address
+	}
+
+	// Tom's authority address
+	return "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t"
+}
+
 const appName = "loopchain"
 
 var (
@@ -301,10 +311,10 @@ func NewChainApp(
 		ProtoFiles: proto.HybridResolver,
 		SigningOptions: signing.Options{
 			AddressCodec: address.Bech32Codec{
-				Bech32Prefix: sdk.GetConfig().GetBech32AccountAddrPrefix(),
+				Bech32Prefix: Bech32Prefix,
 			},
 			ValidatorAddressCodec: address.Bech32Codec{
-				Bech32Prefix: sdk.GetConfig().GetBech32ValidatorAddrPrefix(),
+				Bech32Prefix: Bech32PrefixValAddr,
 			},
 		},
 	})
@@ -317,39 +327,6 @@ func NewChainApp(
 
 	std.RegisterLegacyAminoCodec(legacyAmino)
 	std.RegisterInterfaces(interfaceRegistry)
-
-	// Below we could construct and set an application specific mempool and
-	// ABCI 1.0 PrepareProposal and ProcessProposal handlers. These defaults are
-	// already set in the SDK's BaseApp, this shows an example of how to override
-	// them.
-	//
-	// Example:
-	//
-	// bApp := baseapp.NewBaseApp(...)
-	// nonceMempool := mempool.NewSenderNonceMempool()
-	// abciPropHandler := NewDefaultProposalHandler(nonceMempool, bApp)
-	//
-	// bApp.SetMempool(nonceMempool)
-	// bApp.SetPrepareProposal(abciPropHandler.PrepareProposalHandler())
-	// bApp.SetProcessProposal(abciPropHandler.ProcessProposalHandler())
-	//
-	// Alternatively, you can construct BaseApp options, append those to
-	// baseAppOptions and pass them to NewBaseApp.
-	//
-	// Example:
-	//
-	// prepareOpt = func(app *baseapp.BaseApp) {
-	// 	abciPropHandler := baseapp.NewDefaultProposalHandler(nonceMempool, app)
-	// 	app.SetPrepareProposal(abciPropHandler.PrepareProposalHandler())
-	// }
-	// baseAppOptions = append(baseAppOptions, prepareOpt)
-
-	// create and set dummy vote extension handler
-	// voteExtOp := func(bApp *baseapp.BaseApp) {
-	//	voteExtHandler := NewVoteExtensionHandler()
-	//	voteExtHandler.SetHandlers(bApp)
-	// }
-	// baseAppOptions = append(baseAppOptions, voteExtOp)
 
 	bApp := baseapp.NewBaseApp(appName, logger, db, txConfig.TxDecoder(), baseAppOptions...)
 	bApp.SetCommitMultiStoreTracer(traceStore)
@@ -411,7 +388,7 @@ func NewChainApp(
 	app.ConsensusParamsKeeper = consensusparamkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(keys[consensusparamtypes.StoreKey]),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		runtime.EventService{},
 	)
 	bApp.SetParamStore(app.ConsensusParamsKeeper.ParamsStore)
@@ -439,14 +416,14 @@ func NewChainApp(
 		maccPerms,
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32AccountAddrPrefix()),
 		sdk.GetConfig().GetBech32AccountAddrPrefix(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 	app.BankKeeper = bankkeeper.NewBaseKeeper(
 		appCodec,
 		runtime.NewKVStoreService(keys[banktypes.StoreKey]),
 		app.AccountKeeper,
 		BlockedAddresses(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		logger,
 	)
 
@@ -470,7 +447,7 @@ func NewChainApp(
 		runtime.NewKVStoreService(keys[stakingtypes.StoreKey]),
 		app.AccountKeeper,
 		app.BankKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ValidatorAddrPrefix()),
 		authcodec.NewBech32Codec(sdk.GetConfig().GetBech32ConsensusAddrPrefix()),
 	)
@@ -481,7 +458,7 @@ func NewChainApp(
 		app.AccountKeeper,
 		app.BankKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	app.DistrKeeper = distrkeeper.NewKeeper(
@@ -491,7 +468,7 @@ func NewChainApp(
 		app.BankKeeper,
 		app.StakingKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	app.SlashingKeeper = slashingkeeper.NewKeeper(
@@ -499,7 +476,7 @@ func NewChainApp(
 		legacyAmino,
 		runtime.NewKVStoreService(keys[slashingtypes.StoreKey]),
 		app.StakingKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	invCheckPeriod := cast.ToUint(appOpts.Get(server.FlagInvCheckPeriod))
@@ -509,7 +486,7 @@ func NewChainApp(
 		invCheckPeriod,
 		app.BankKeeper,
 		authtypes.FeeCollectorName,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		app.AccountKeeper.AddressCodec(),
 	)
 
@@ -524,7 +501,7 @@ func NewChainApp(
 	app.CircuitKeeper = circuitkeeper.NewKeeper(
 		appCodec,
 		runtime.NewKVStoreService(keys[circuittypes.StoreKey]),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		app.AccountKeeper.AddressCodec(),
 	)
 	app.BaseApp.SetCircuitBreaker(&app.CircuitKeeper)
@@ -560,7 +537,7 @@ func NewChainApp(
 		appCodec,
 		homePath,
 		app.BaseApp,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	app.IBCKeeper = ibckeeper.NewKeeper(
@@ -570,7 +547,7 @@ func NewChainApp(
 		app.StakingKeeper,
 		app.UpgradeKeeper,
 		scopedIBCKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	// Register the proposal types
@@ -591,7 +568,7 @@ func NewChainApp(
 		app.DistrKeeper,
 		app.MsgServiceRouter(),
 		govConfig,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	// Set legacy router for backwards compatibility with gov v1beta1
@@ -626,7 +603,17 @@ func NewChainApp(
 	app.GlobalFeeKeeper = globalfeekeeper.NewKeeper(
 		appCodec,
 		app.keys[globalfeetypes.StoreKey],
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
+	)
+
+	// Initialize the poa Keeper and and AppModule
+	app.POAKeeper = poakeeper.NewKeeper(
+		appCodec,
+		runtime.NewKVStoreService(keys[poa.StoreKey]),
+		app.StakingKeeper,
+		app.SlashingKeeper,
+		app.BankKeeper,
+		logger,
 	)
 
 	// Create the tokenfactory keeper
@@ -640,22 +627,12 @@ func NewChainApp(
 			tokenfactorytypes.EnableBurnFrom,
 			tokenfactorytypes.EnableForceTransfer,
 			tokenfactorytypes.EnableSetMetadata,
-			// tokenfactorytypes.EnableSudoMint,
+			tokenfactorytypes.EnableSudoMint,
 		},
-		tokenfactorykeeper.DefaultIsSudoAdminFunc,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		app.POAKeeper.IsAdmin,
+		GetPoAAdmin(),
 	)
 	wasmOpts = append(wasmOpts, tokenfactorybindings.RegisterCustomPlugins(app.BankKeeper, &app.TokenFactoryKeeper)...)
-
-	// Initialize the poa Keeper and and AppModule
-	app.POAKeeper = poakeeper.NewKeeper(
-		appCodec,
-		runtime.NewKVStoreService(keys[poa.StoreKey]),
-		app.StakingKeeper,
-		app.SlashingKeeper,
-		app.BankKeeper,
-		logger,
-	)
 
 	// IBC Fee Module keeper
 	app.IBCFeeKeeper = ibcfeekeeper.NewKeeper(
@@ -676,7 +653,7 @@ func NewChainApp(
 		app.AccountKeeper,
 		app.BankKeeper,
 		scopedTransferKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	// Create the packetfoward keeper
@@ -688,7 +665,7 @@ func NewChainApp(
 		app.DistrKeeper,
 		app.BankKeeper,
 		app.IBCKeeper.ChannelKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 	app.PacketForwardKeeper.SetTransferKeeper(app.TransferKeeper)
 
@@ -702,7 +679,7 @@ func NewChainApp(
 		app.AccountKeeper,
 		scopedICAHostKeeper,
 		app.MsgServiceRouter(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 	app.ICAControllerKeeper = icacontrollerkeeper.NewKeeper(
 		appCodec,
@@ -713,7 +690,7 @@ func NewChainApp(
 		app.IBCKeeper.PortKeeper,
 		scopedICAControllerKeeper,
 		app.MsgServiceRouter(),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 	)
 
 	wasmDir := filepath.Join(homePath, "wasm")
@@ -741,7 +718,7 @@ func NewChainApp(
 		wasmDir,
 		wasmConfig,
 		strings.Join(AllCapabilities(), ","),
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		wasmOpts...,
 	)
 
@@ -770,7 +747,7 @@ func NewChainApp(
 		appCodec,
 		runtime.NewKVStoreService(keys[wasmlctypes.StoreKey]),
 		app.IBCKeeper.ClientKeeper,
-		authtypes.NewModuleAddress(govtypes.ModuleName).String(),
+		GetPoAAdmin(),
 		lc08,
 		bApp.GRPCQueryRouter(),
 		wasmlckeeper.WithQueryPlugins(&wasmLightClientQuerier),
@@ -1386,4 +1363,13 @@ func initParamsKeeper(appCodec codec.BinaryCodec, legacyAmino *codec.LegacyAmino
 	paramsKeeper.Subspace(packetforwardtypes.ModuleName).WithKeyTable(packetforwardtypes.ParamKeyTable())
 
 	return paramsKeeper
+}
+
+// SetConfigBech32 sets the global bech32 config for unit testing.
+func SetConfigBech32() {
+	sdkConfig := sdk.GetConfig()
+	sdkConfig.SetBech32PrefixForAccount(Bech32PrefixAccAddr, Bech32PrefixAccPub)
+	sdkConfig.SetBech32PrefixForValidator(Bech32PrefixValAddr, Bech32PrefixValPub)
+	sdkConfig.SetBech32PrefixForConsensusNode(Bech32PrefixConsAddr, Bech32PrefixConsPub)
+	sdkConfig.Seal()
 }

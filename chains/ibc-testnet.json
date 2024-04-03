@@ -19,7 +19,7 @@
             "number_vals": 1,
             "number_node": 0,
             "debugging": true,
-            "block_time": "1000ms",
+            "block_time": "3000ms",
             "host_port_override": {
                 "26657": "26657",
                 "1317": "1317",
@@ -38,6 +38,26 @@
             "genesis": {
                 "modify": [
                     {
+                        "key": "consensus.params.block.max_gas",
+                        "value": "-1"
+                    },
+                    {
+                        "key": "consensus.params.abci.vote_extensions_enable_height",
+                        "value": "1"
+                    },
+                    {
+                        "key": "app_state.mint.minter.inflation",
+                        "value": "0.000000000000000000"
+                    },
+                    {
+                        "key": "app_state.mint.params.mint_denom",
+                        "value": "token"
+                    },
+                    {
+                        "key": "app_state.crisis.constant_fee",
+                        "value": {"denom": "token","amount": "1000000"}
+                    },
+                    {
                         "key": "app_state.gov.params.voting_period",
                         "value": "15s"
                     },
@@ -50,12 +70,40 @@
                         "value": "15s"
                     },
                     {
-                        "key": "app_state.gov.params.min_deposit.0.denom",
-                        "value": "token"
+                        "key": "app_state.gov.params.min_deposit",
+                        "value": [{"denom": "token", "amount": "1000000"}]
                     },
                     {
-                        "key": "app_state.gov.params.min_deposit.0.amount",
-                        "value": "1"
+                        "key": "app_state.gov.params.expedited_min_deposit",
+                        "value": [{"denom": "token", "amount": "1000000"}]
+                    },
+                    {
+                        "key": "app_state.tokenfactory.params.denom_creation_fee",
+                        "value": []
+                    },
+                    {
+                        "key": "app_state.tokenfactory.params.denom_creation_gas_consume",
+                        "value": "250000"
+                    },
+                    {
+                        "key": "app_state.wasm.params.code_upload_access.permission",
+                        "value": "AnyOfAddresses"
+                    },
+                    {
+                        "key": "app_state.wasm.params.instantiate_default_permission",
+                        "value": "AnyOfAddresses"
+                    },
+                    {
+                        "key": "app_state.wasm.params.instantiate_default_permission",
+                        "value": "AnyOfAddresses"
+                    },
+                    {
+                        "key": "app_state.wasm.params.code_upload_access.addresses",
+                        "value": ["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t","loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q"]
+                    },
+                    {
+                        "key": "app_state.poa.params.admins",
+                        "value": ["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t"]
                     }
                 ],
                 "accounts": [
@@ -70,6 +118,16 @@
                         "address": "loop1efd63aw40lxf3n4mhf7dzhjkr453axur4pahwk",
                         "amount": "10000000000token",
                         "mnemonic": "wealth flavor believe regret funny network recall kiss grape useless pepper cram hint member few certain unveil rather brick bargain curious require crowd raise"
+                    },
+                    {
+                        "name": "authority",
+                        "address": "loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t",
+                        "amount": "10000000000token"
+                    },
+                    {
+                        "name": "contractpermission",
+                        "address": "loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q",
+                        "amount": "10000000000token"
                     }
                 ],
                 "startup_commands": []
@@ -84,7 +142,7 @@
             "docker_image": {
                 "version": "v9.1.0"
             },
-            "block_time": "1000ms",
+            "block_time": "6000ms",
             "gas_prices": "0%DENOM%",
             "gas_adjustment": 2.0,
             "ibc_paths": ["ibc-connection-1"],
