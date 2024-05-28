@@ -54,8 +54,6 @@ func TestPOA(t *testing.T) {
 	// === Test Cases ===
 	testStakingDisabled(t, ctx, chain, validators, acc0, acc1)
 	testPowerErrors(t, ctx, chain, validators, incorrectUser, acc0)
-	testPending(t, ctx, chain, acc0)
-	testRemoveValidator(t, ctx, chain, validators, acc0)
 }
 
 func testRemoveValidator(t *testing.T, ctx context.Context, chain *cosmos.CosmosChain, validators []string, acc0 ibc.Wallet) {

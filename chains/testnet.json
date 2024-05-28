@@ -93,12 +93,8 @@
                         "value": "AnyOfAddresses"
                     },
                     {
-                        "key": "app_state.wasm.params.instantiate_default_permission",
-                        "value": "AnyOfAddresses"
-                    },
-                    {
                         "key": "app_state.wasm.params.code_upload_access.addresses",
-                        "value": ["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t","loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q"]
+                        "value": ["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t","loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q", "loop1hj5fveer5cjtn4wd6wstzugjfdxzl0xpf4wn8l", "loop1efd63aw40lxf3n4mhf7dzhjkr453axur4pahwk"]
                     },
                     {
                         "key": "app_state.poa.params.admins",

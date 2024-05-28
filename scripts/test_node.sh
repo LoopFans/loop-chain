@@ -64,9 +64,9 @@ from_scratch () {
     echo $mnemonic | BINARY keys add $key --keyring-backend $KEYRING --algo $KEYALGO --recover
   }
 
-  # loop1efd63aw40lxf3n4mhf7dzhjkr453axur4pahwk
-  add_key $KEY "decorate bright ozone fork gallery riot bus exhaust worth way bone indoor calm squirrel merry zero scheme cotton until shop any excess stage laundry"
   # loop1hj5fveer5cjtn4wd6wstzugjfdxzl0xpf4wn8l
+  add_key $KEY "decorate bright ozone fork gallery riot bus exhaust worth way bone indoor calm squirrel merry zero scheme cotton until shop any excess stage laundry"
+  # loop1efd63aw40lxf3n4mhf7dzhjkr453axur4pahwk
   add_key $KEY2 "wealth flavor believe regret funny network recall kiss grape useless pepper cram hint member few certain unveil rather brick bargain curious require crowd raise"
 
   # chain initial setup
@@ -104,6 +104,12 @@ from_scratch () {
   update_test_genesis '.app_state["tokenfactory"]["params"]["denom_creation_gas_consume"]=100000'
   # poa
   update_test_genesis '.app_state["poa"]["params"]["admins"]=["loop10d07y265gmmuvt4z0w9aw880jnsr700j4m0ya0","loop1hj5fveer5cjtn4wd6wstzugjfdxzl0xpf4wn8l"]'
+
+  # cosmwasm
+  update_test_genesis '.app_state["wasm"]["params"]["code_upload_access"]["permission"]="AnyOfAddresses"'
+  update_test_genesis '.app_state["wasm"]["params"]["instantiate_default_permission"]="AnyOfAddresses"'
+  update_test_genesis '.app_state["wasm"]["params"]["instantiate_default_permission"]="AnyOfAddresses"'
+  update_test_genesis '.app_state["wasm"]["params"]["code_upload_access"]["addresses"]=["loop1v4ngsp3xemjhdle8hz3vvlecv6ej4reeys6m3t","loop1j0dzk6apfpkh5ug7ykkgx34wnps2jszhxu029q","loop1hj5fveer5cjtn4wd6wstzugjfdxzl0xpf4wn8l"]'
 
   # Allocate genesis accounts
   BINARY genesis add-genesis-account $KEY 10000000$DENOM,900test --keyring-backend $KEYRING
