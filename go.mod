@@ -39,7 +39,7 @@ require (
 	cosmossdk.io/x/upgrade v0.1.1
 	github.com/CosmWasm/wasmd v0.50.0
 	github.com/CosmWasm/wasmvm v1.5.2
-	github.com/cometbft/cometbft v0.38.6
+	github.com/cometbft/cometbft v0.38.7
 	github.com/cosmos/cosmos-db v1.0.2
 	github.com/cosmos/cosmos-sdk v0.50.6
 	github.com/cosmos/gogoproto v1.4.12
@@ -53,8 +53,8 @@ require (
 	github.com/spf13/pflag v1.0.5
 	github.com/spf13/viper v1.18.2
 	github.com/strangelove-ventures/globalfee v0.50.0
-	github.com/strangelove-ventures/poa v0.50.1-alpha.1
-	github.com/strangelove-ventures/tokenfactory v0.50.1-0.20240423190550-03a4e6dc955a
+	github.com/strangelove-ventures/poa v0.50.1
+	github.com/strangelove-ventures/tokenfactory v0.50.1
 	github.com/stretchr/testify v1.9.0
 	google.golang.org/protobuf v1.33.0
 )
